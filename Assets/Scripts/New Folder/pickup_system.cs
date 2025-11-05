@@ -15,9 +15,6 @@ public class MovingOutStylePickup : MonoBehaviour
     [SerializeField] private float throwForce = 10f;
     [SerializeField] private float throwUpForce = 2f;
     
-    [Header("Movement Settings")]
-    [SerializeField] private float carrySpeedMultiplier = 0.6f; // Chậm lại khi cầm đồ
-    
     [Header("Input")]
     [SerializeField] private KeyCode pickupKey = KeyCode.E;
     [SerializeField] private KeyCode throwKey = KeyCode.Mouse0; // Click chuột trái để ném

@@ -11,20 +11,26 @@ public class RagdollController : MonoBehaviour
     
     [Header("Jump Settings")]
     [SerializeField] private float jumpForce = 300f;
-    [SerializeField] private float groundCheckDistance = 0.6f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.3f;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float jumpCooldown = 0.3f;
     
     [Header("Ragdoll References")]
     [SerializeField] private Rigidbody sphereRigidbody; // AnimateBody (sphere)
     [SerializeField] private ConfigurableJoint hipJoint; // ConfigurableJoint của hips
     
+    [Header("Animation Settings")]
+    [SerializeField] private Animator animator; // THÊM ANIMATOR
+    [SerializeField] private float animationSpeedMultiplier = 0.4f; // Điều chỉnh tốc độ animation
+    
     [Header("Camera Reference")]
     [SerializeField] private Transform cameraTransform;
     
     [Header("Rotation Settings")]
-    [SerializeField] private float rotationSpeed = 5f; // Tốc độ xoay mục tiêu
-    [SerializeField] private float jointRotationDrive = 1000f; // Sức mạnh xoay của joint
-    [SerializeField] private float jointRotationDamping = 100f; // Damping cho xoay
+    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float jointRotationDrive = 1000f;
+    [SerializeField] private float jointRotationDamping = 100f;
     
     // Movement variables
     private bool isGrounded;
@@ -34,9 +40,13 @@ public class RagdollController : MonoBehaviour
     private bool jumpPressed;
     private Vector3 lastMoveDirection;
     private Quaternion targetRotation;
-    
+
     // Pickup system reference (optional)
     private MovingOutStylePickup pickupSystem;
+    private float lastJumpTime;
+
+    // Animation sync system
+    private SyncPhysicsObject[] syncPhysicsObjects; // THÊM SYNC SYSTEM
 
     void Start()
     {
@@ -61,17 +71,14 @@ public class RagdollController : MonoBehaviour
         // Setup ConfigurableJoint rotation drive
         if (hipJoint != null)
         {
-            // Đảm bảo rotation mode đúng
             hipJoint.rotationDriveMode = RotationDriveMode.Slerp;
             
-            // Bật Slerp Drive để điều khiển rotation
             JointDrive slerpDrive = new JointDrive();
             slerpDrive.positionSpring = jointRotationDrive;
             slerpDrive.positionDamper = jointRotationDamping;
             slerpDrive.maximumForce = Mathf.Infinity;
             hipJoint.slerpDrive = slerpDrive;
             
-            // Khởi tạo target rotation = rotation hiện tại (world space)
             Transform sphereTransform = hipJoint.connectedBody != null ? hipJoint.connectedBody.transform : transform;
             Quaternion worldRotation = hipJoint.transform.rotation;
             targetRotation = Quaternion.Inverse(sphereTransform.rotation) * worldRotation;
@@ -79,6 +86,9 @@ public class RagdollController : MonoBehaviour
         
         // Tìm pickup system nếu có
         pickupSystem = GetComponentInChildren<MovingOutStylePickup>();
+        
+        // TÌM TẤT CẢ SYNCPHYSICSOBJECT COMPONENTS (giống NetworkPlayer)
+        syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
         
         lastMoveDirection = transform.forward;
     }
@@ -94,74 +104,51 @@ public class RagdollController : MonoBehaviour
         HandleMovement();
         HandleRotation();
         HandleJump();
+        UpdateAnimation();
     }
 
     void HandleInput()
     {
-        // WASD / Arrow Keys
         moveX = Input.GetAxisRaw("Horizontal");
         moveZ = Input.GetAxisRaw("Vertical");
         
-        // Shift để chạy
         isRunning = Input.GetKey(KeyCode.LeftShift);
-        
-        // Space để nhảy
         jumpPressed = Input.GetButtonDown("Jump");
-        
-        // Test rotation với Q/E keys
-        if (Input.GetKey(KeyCode.Q))
-        {
-            // Xoay trái
-            lastMoveDirection = Quaternion.Euler(0, -90 * Time.deltaTime, 0) * lastMoveDirection;
-        }
-        if (Input.GetKey(KeyCode.E))
-        {
-            // Xoay phải
-            lastMoveDirection = Quaternion.Euler(0, 90 * Time.deltaTime, 0) * lastMoveDirection;
-        }
     }
 
     void CheckGround()
     {
-        // Kiểm tra chạm đất từ sphere
-        isGrounded = Physics.Raycast(sphereRigidbody.position, Vector3.down, 
-                                     groundCheckDistance, groundMask);
+        if (groundCheck == null) return;
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
     }
 
     void HandleMovement()
     {
         if (sphereRigidbody == null) return;
         
-        // Tính hướng di chuyển THEO HƯỚNG CAMERA
         Vector3 cameraForward = cameraTransform.forward;
         Vector3 cameraRight = cameraTransform.right;
         
-        // Bỏ thành phần Y để chỉ di chuyển trên mặt phẳng ngang
         cameraForward.y = 0;
         cameraRight.y = 0;
         cameraForward.Normalize();
         cameraRight.Normalize();
         
-        // Hướng di chuyển tương đối với camera
         Vector3 moveDirection = cameraRight * moveX + cameraForward * moveZ;
         moveDirection = moveDirection.normalized;
         
-        // Lưu hướng di chuyển cuối cùng để xoay
         if (moveDirection.magnitude > 0.1f)
         {
             lastMoveDirection = moveDirection;
         }
         
-        // Tính tốc độ tối đa
         float currentMaxSpeed = isRunning ? maxRunSpeed : maxSpeed;
         
-        // Giảm tốc độ nếu đang cầm đồ
         if (pickupSystem != null && pickupSystem.IsCarrying())
         {
             currentMaxSpeed *= 0.6f;
         }
         
-        // Chỉ áp dụng force nếu chưa đạt max speed
         Vector3 horizontalVelocity = new Vector3(sphereRigidbody.velocity.x, 0, 
                                                   sphereRigidbody.velocity.z);
         
@@ -172,7 +159,6 @@ public class RagdollController : MonoBehaviour
                                      ForceMode.Force);
         }
         
-        // Giới hạn vận tốc ngang
         if (horizontalVelocity.magnitude > currentMaxSpeed)
         {
             horizontalVelocity = horizontalVelocity.normalized * currentMaxSpeed;
@@ -186,32 +172,58 @@ public class RagdollController : MonoBehaviour
     {
         if (hipJoint == null) return;
         
-        // Luôn cập nhật rotation, không chỉ khi di chuyển
-        // Tính world rotation mục tiêu
         Quaternion worldTargetRotation = Quaternion.LookRotation(lastMoveDirection);
         
-        // Chuyển sang local rotation so với sphere (connected body)
         Transform sphereTransform = hipJoint.connectedBody != null ? hipJoint.connectedBody.transform : transform;
         Quaternion localTargetRotation = Quaternion.Inverse(sphereTransform.rotation) * worldTargetRotation;
         
-        // Lerp smooth đến target rotation (chỉ khi đang di chuyển)
         if (moveX != 0 || moveZ != 0)
         {
             targetRotation = Quaternion.Slerp(targetRotation, localTargetRotation, rotationSpeed * Time.fixedDeltaTime);
         }
         
-        // Set target rotation cho joint (inverse vì ConfigurableJoint dùng inverse quaternion)
         hipJoint.targetRotation = Quaternion.Inverse(targetRotation);
     }
 
     void HandleJump()
     {
-        if (jumpPressed && isGrounded && sphereRigidbody != null)
+        if (sphereRigidbody == null) return;
+        
+        bool canJump = Time.time - lastJumpTime > jumpCooldown;
+        
+        if (jumpPressed && isGrounded && canJump)
         {
             sphereRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            lastJumpTime = Time.time;
         }
     }
 
+    // HÀM MỚI: CẬP NHẬT ANIMATION (giống NetworkPlayer)
+    void UpdateAnimation()
+    {
+        if (animator == null) return;
+
+        // Tính local forward velocity (giống NetworkPlayer line 124)
+        Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, sphereRigidbody.velocity);
+        float localForwardVelocity = localVelocityVsForward.magnitude;
+
+        // Set animation speed parameter
+        animator.SetFloat("movementSpeed", localForwardVelocity * animationSpeedMultiplier);
+
+        // Có thể thêm các parameter khác nếu cần:
+        
+
+        // UPDATE JOINT ROTATION FROM ANIMATION (giống NetworkPlayer line 127-130)
+        if (syncPhysicsObjects != null)
+        {
+            for (int i = 0; i < syncPhysicsObjects.Length; i++)
+            {
+                syncPhysicsObjects[i].UpdateJointFromAnimation();
+            }
+        }
+    }
+
+    // PUBLIC METHODS
     public bool IsMoving()
     {
         return moveX != 0 || moveZ != 0;
@@ -230,7 +242,6 @@ public class RagdollController : MonoBehaviour
         return horizontalVelocity.magnitude;
     }
 
-    // Điều chỉnh Joint Drive từ code khác nếu cần
     public void SetJointRotationStrength(float spring, float damper)
     {
         if (hipJoint == null) return;
@@ -243,13 +254,14 @@ public class RagdollController : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        if (groundCheck != null)
+        {
+            Gizmos.color = isGrounded ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+        
         if (sphereRigidbody != null)
         {
-            // Vẽ ground check ray
-            Gizmos.color = isGrounded ? Color.green : Color.red;
-            Gizmos.DrawRay(sphereRigidbody.position, Vector3.down * groundCheckDistance);
-            
-            // Vẽ hướng di chuyển
             if (Application.isPlaying && lastMoveDirection.magnitude > 0.1f)
             {
                 Gizmos.color = Color.blue;
@@ -257,7 +269,6 @@ public class RagdollController : MonoBehaviour
             }
         }
         
-        // Vẽ hướng hips target
         if (hipJoint != null && Application.isPlaying)
         {
             Gizmos.color = Color.yellow;
