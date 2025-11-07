@@ -205,7 +205,7 @@ public class MovingOutStylePickup : MonoBehaviour
         {
             Vector3 throwDirection = playerCamera.transform.forward;
             Vector3 throwVelocity = throwDirection * throwForce + Vector3.up * throwUpForce;
-            rb.velocity = throwVelocity;
+            rb.linearVelocity = throwVelocity;
             
             // Thêm xoay ngẫu nhiên
             rb.angularVelocity = Random.insideUnitSphere * 2f;

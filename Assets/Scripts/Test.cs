@@ -57,7 +57,7 @@ public class test : MonoBehaviour
         // Setup sphere rigidbody
         if (sphereRigidbody != null)
         {
-            sphereRigidbody.drag = drag;
+            sphereRigidbody.linearDamping = drag;
             sphereRigidbody.mass = 10f;
             sphereRigidbody.interpolation = RigidbodyInterpolation.Interpolate; // Smooth movement
             sphereRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous; // Better collision
@@ -157,8 +157,8 @@ public class test : MonoBehaviour
         }
         
         // Chỉ áp dụng force nếu chưa đạt max speed
-        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.velocity.x, 0, 
-                                                  sphereRigidbody.velocity.z);
+        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.linearVelocity.x, 0, 
+                                                  sphereRigidbody.linearVelocity.z);
         
         if (horizontalVelocity.magnitude < currentMaxSpeed)
         {
@@ -171,8 +171,8 @@ public class test : MonoBehaviour
         if (horizontalVelocity.magnitude > currentMaxSpeed)
         {
             horizontalVelocity = horizontalVelocity.normalized * currentMaxSpeed;
-            sphereRigidbody.velocity = new Vector3(horizontalVelocity.x, 
-                                                   sphereRigidbody.velocity.y, 
+            sphereRigidbody.linearVelocity = new Vector3(horizontalVelocity.x, 
+                                                   sphereRigidbody.linearVelocity.y, 
                                                    horizontalVelocity.z);
         }
     }
@@ -209,9 +209,9 @@ public class test : MonoBehaviour
         if (jumpPressed && isGrounded && canJump)
         {
             // Reset velocity.y trước khi nhảy
-            Vector3 vel = sphereRigidbody.velocity;
+            Vector3 vel = sphereRigidbody.linearVelocity;
             vel.y = 0;
-            sphereRigidbody.velocity = vel;
+            sphereRigidbody.linearVelocity = vel;
             
             // Apply jump force
             sphereRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -234,8 +234,8 @@ public class test : MonoBehaviour
     public float GetCurrentSpeed()
     {
         if (sphereRigidbody == null) return 0;
-        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.velocity.x, 0, 
-                                                  sphereRigidbody.velocity.z);
+        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.linearVelocity.x, 0, 
+                                                  sphereRigidbody.linearVelocity.z);
         return horizontalVelocity.magnitude;
     }
 

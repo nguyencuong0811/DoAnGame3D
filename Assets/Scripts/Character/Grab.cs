@@ -81,7 +81,7 @@ public class Grab : MonoBehaviour
         {
             // Truyền vận tốc tay để thả tự nhiên/“ném” nhẹ
             var rb = grabbed ? grabbed.GetComponent<Rigidbody>() : null;
-            Vector3 v = handRigidbody.velocity;
+            Vector3 v = handRigidbody.linearVelocity;
             Vector3 w = handRigidbody.angularVelocity;
 
             Destroy(joint);
@@ -89,7 +89,7 @@ public class Grab : MonoBehaviour
 
             if (rb != null)
             {
-                rb.velocity = v;
+                rb.linearVelocity = v;
                 rb.angularVelocity = w;
             }
         }

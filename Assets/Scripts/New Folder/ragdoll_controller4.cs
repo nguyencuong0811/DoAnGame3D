@@ -64,7 +64,7 @@ public class RagdollController : MonoBehaviour
         // Setup sphere rigidbody
         if (sphereRigidbody != null)
         {
-            sphereRigidbody.drag = drag;
+            sphereRigidbody.linearDamping = drag;
             sphereRigidbody.mass = 10f;
         }
         
@@ -149,8 +149,8 @@ public class RagdollController : MonoBehaviour
             currentMaxSpeed *= 0.6f;
         }
         
-        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.velocity.x, 0, 
-                                                  sphereRigidbody.velocity.z);
+        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.linearVelocity.x, 0, 
+                                                  sphereRigidbody.linearVelocity.z);
         
         if (horizontalVelocity.magnitude < currentMaxSpeed)
         {
@@ -162,8 +162,8 @@ public class RagdollController : MonoBehaviour
         if (horizontalVelocity.magnitude > currentMaxSpeed)
         {
             horizontalVelocity = horizontalVelocity.normalized * currentMaxSpeed;
-            sphereRigidbody.velocity = new Vector3(horizontalVelocity.x, 
-                                                   sphereRigidbody.velocity.y, 
+            sphereRigidbody.linearVelocity = new Vector3(horizontalVelocity.x, 
+                                                   sphereRigidbody.linearVelocity.y, 
                                                    horizontalVelocity.z);
         }
     }
@@ -204,7 +204,7 @@ public class RagdollController : MonoBehaviour
         if (animator == null) return;
 
         // Tính local forward velocity (giống NetworkPlayer line 124)
-        Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, sphereRigidbody.velocity);
+        Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, sphereRigidbody.linearVelocity);
         float localForwardVelocity = localVelocityVsForward.magnitude;
 
         // Set animation speed parameter
@@ -237,8 +237,8 @@ public class RagdollController : MonoBehaviour
     public float GetCurrentSpeed()
     {
         if (sphereRigidbody == null) return 0;
-        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.velocity.x, 0, 
-                                                  sphereRigidbody.velocity.z);
+        Vector3 horizontalVelocity = new Vector3(sphereRigidbody.linearVelocity.x, 0, 
+                                                  sphereRigidbody.linearVelocity.z);
         return horizontalVelocity.magnitude;
     }
 

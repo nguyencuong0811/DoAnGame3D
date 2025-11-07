@@ -84,11 +84,11 @@ public class NetworkPlayer : MonoBehaviour
 
         float inputMagnitude = moveInputVector.magnitude;
 
-        Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, rigidbody3D.velocity);
+        Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, rigidbody3D.linearVelocity);
         float localForwardVelocity = localVelocityVsForward.magnitude;
 
         //tốc độ theo mặt phẳng
-        Vector3 planarVel = Vector3.ProjectOnPlane(rigidbody3D.velocity, Vector3.up);
+        Vector3 planarVel = Vector3.ProjectOnPlane(rigidbody3D.linearVelocity, Vector3.up);
         float speed = planarVel.magnitude;
 
         if (inputMagnitude != 0)
