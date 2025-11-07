@@ -14,6 +14,13 @@ public class Grab : MonoBehaviour
     public float breakForce = 3500f;
     public float breakTorque = 3500f;
 
+    [Header("Weight Limit")]
+    public bool enableWeightLimit = true;
+    public float maxGrabMass = 10f;      // Khối lượng tối đa có thể cầm (kg)
+    public float maxSkillMass = 20f;     // Khối lượng tối đa có thể cầm khi dùng skill (kg)
+    public bool showWeightFeedback = true; // Hiện thông báo khi vật quá nặng
+    public float timeskill = 15f; // Thời gian giữ skill
+
     private bool wantGrab;               // Đang giữ nút (muốn cầm)
     private GameObject candidate;        // Vật trong vùng tay
     private Collider candidateCol;       
@@ -27,12 +34,12 @@ public class Grab : MonoBehaviour
 
     void Update()
     {
-        // Bắt đầu "muốn cầm" => bật animation NGAY
+        // Bắt đầu muốn cầm => bật animation NGAY
         if (Input.GetMouseButtonDown(mouseButton))
         {
             wantGrab = true;
             if (animator) animator.SetBool("isGrabbing", true);
-            // Nếu đã có ứng viên trong tay thì gắn luôn
+            // Nếu đã có đồ trong tay thì gắn luôn
             TryAttachIfPossible();
         }
 
@@ -42,12 +49,16 @@ public class Grab : MonoBehaviour
             TryAttachIfPossible();
         }
 
-        // Thả nút => tắt anim & thả đồ
+        // Thả nút tắt anim & thả đồ
         if (Input.GetMouseButtonUp(mouseButton))
         {
             wantGrab = false;
             if (animator) animator.SetBool("isGrabbing", false);
             Release();
+        }
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            UseSkillGrab();
         }
     }
 
@@ -57,6 +68,17 @@ public class Grab : MonoBehaviour
 
         Rigidbody targetRb = candidate.GetComponent<Rigidbody>();
         if (targetRb == null || targetRb.isKinematic) return;
+
+        // KIỂM TRA CÂN NẶNG
+        if (enableWeightLimit && targetRb.mass > maxGrabMass)
+        {
+            if (showWeightFeedback)
+            {
+                Debug.Log($"Vật {candidate.name} quá nặng! ({targetRb.mass:F1}kg > {maxGrabMass}kg)");
+                //thêm UI notification hoặc sound effect ở đây
+            }
+            return; // Không cầm được
+        }
 
         // Tạo joint trên VẬT và nối với tay
         joint = candidate.AddComponent<FixedJoint>();
@@ -79,7 +101,7 @@ public class Grab : MonoBehaviour
     {
         if (joint != null)
         {
-            // Truyền vận tốc tay để thả tự nhiên/“ném” nhẹ
+            // Truyền vận tốc tay để thả tự nhiên
             var rb = grabbed ? grabbed.GetComponent<Rigidbody>() : null;
             Vector3 v = handRigidbody.velocity;
             Vector3 w = handRigidbody.angularVelocity;
@@ -115,6 +137,40 @@ public class Grab : MonoBehaviour
         {
             candidate = null;
             candidateCol = null;
+        }
+    }
+
+    // HÀM HỖ TRỢ: Kiểm tra xem có thể cầm vật không
+    public bool CanGrabObject(GameObject obj)
+    {
+        if (obj == null) return false;
+
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb == null || rb.isKinematic) return false;
+
+        if (enableWeightLimit && rb.mass > maxGrabMass) return false;
+
+        return true;
+    }
+    public void UseSkillGrab()
+    {
+        maxGrabMass = maxSkillMass;
+        Invoke("ResetGrabMass", timeskill);
+    }
+    void ResetGrabMass()
+    {
+        maxGrabMass = 10f;
+        // Nếu đang cầm đồ
+        if (grabbed != null)
+        {
+            Rigidbody rb = grabbed.GetComponent<Rigidbody>();
+
+            // mà đồ nặng quá thì thả
+            if (rb != null && rb.mass > maxGrabMass)
+            {
+                Debug.Log($"Thả vì {grabbed.name} quá nặng sau khi hết skill!");
+                Release();
+            }
         }
     }
 }
