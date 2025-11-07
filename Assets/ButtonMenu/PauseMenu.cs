@@ -12,10 +12,9 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(true);
         Time.timeScale = 0;
     }
-    public void Home()
+    public void Quit()
     {
-        SceneManager.LoadScene("Home");
-        Time.timeScale = 1;
+       Application.Quit();
 
     }
     public void Resume()
