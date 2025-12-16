@@ -48,6 +48,9 @@ public class RagdollController : MonoBehaviour
     // Animation sync system
     private SyncPhysicsObject[] syncPhysicsObjects; // THÊM SYNC SYSTEM
 
+    //Chap va :((
+    private float _maxSpeed;
+    private float _maxRunSpeed;
     void Start()
     {
         // Script này gắn vào AnimateBody (sphere)
@@ -91,6 +94,9 @@ public class RagdollController : MonoBehaviour
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
         
         lastMoveDirection = transform.forward;
+
+        _maxSpeed = maxSpeed;
+        _maxRunSpeed = maxRunSpeed;
     }
 
     void Update()
@@ -275,5 +281,15 @@ public class RagdollController : MonoBehaviour
             Vector3 targetForward = targetRotation * Vector3.forward;
             Gizmos.DrawRay(hipJoint.transform.position, targetForward * 1.5f);
         }
+    }
+    public void SetSpeedOnGrab(float speed)
+    {
+        maxSpeed = speed;
+        maxRunSpeed = speed * 1.5f;
+    }
+    public void ResetSpeed()
+    {
+        maxSpeed = _maxSpeed;
+        maxRunSpeed = _maxRunSpeed;
     }
 }

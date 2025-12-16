@@ -906,7 +906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95e638b5257ca242a7b3cb72cf724f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: nhamap2
+  sceneName: lan
 --- !u!1 &730432946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,7 +1860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95e638b5257ca242a7b3cb72cf724f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: 
+  sceneName: yen
 --- !u!1 &1647015569
 GameObject:
   m_ObjectHideFlags: 0

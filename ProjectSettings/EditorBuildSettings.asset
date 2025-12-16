@@ -12,12 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Demo.unity
     guid: e9017d5f96b9f09489b4b37e1d6eb914
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/yen.unity
+    guid: bd453a852c1cc4b449bf8e285b2fda88
   - enabled: 1
     path: Assets/Scenes/LevelPage.unity
     guid: 9f87892546428dd44acb352ee7e76283
   - enabled: 1
-    path: Assets/Scenes/nhamap2.unity
-    guid: bd453a852c1cc4b449bf8e285b2fda88
+    path: Assets/Scenes/lan.unity
+    guid: 854e7e4facd73874384072d8fd8f5b1e
   m_configObjects: {}

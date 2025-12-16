@@ -20,7 +20,7 @@ public class Grab : MonoBehaviour
     public float maxSkillMass = 20f;     // Khối lượng tối đa có thể cầm khi dùng skill (kg)
     public bool showWeightFeedback = true; // Hiện thông báo khi vật quá nặng
     public float timeskill = 15f; // Thời gian giữ skill
-
+    public float speedOnGrab = 3f;
     private bool wantGrab;               // Đang giữ nút (muốn cầm)
     private GameObject candidate;        // Vật trong vùng tay
     private Collider candidateCol;       
@@ -54,6 +54,8 @@ public class Grab : MonoBehaviour
         {
             wantGrab = false;
             if (animator) animator.SetBool("isGrabbing", false);
+            RagdollController ragdoll = handRigidbody.GetComponentInParent<RagdollController>();
+            ragdoll.ResetSpeed();
             Release();
         }
         if(Input.GetKeyDown(KeyCode.G))
@@ -77,9 +79,13 @@ public class Grab : MonoBehaviour
                 Debug.Log($"Vật {candidate.name} quá nặng! ({targetRb.mass:F1}kg > {maxGrabMass}kg)");
                 //thêm UI notification hoặc sound effect ở đây
             }
-            return; // Không cầm được
         }
-
+        if(targetRb.mass > maxGrabMass)
+        {
+            RagdollController ragdoll = handRigidbody.GetComponentInParent<RagdollController>();
+            Debug.Log($"Giảm tốc độ vì cầm vật nặng {targetRb.mass}kg");
+            ragdoll.SetSpeedOnGrab(speedOnGrab);
+        }
         // Tạo joint trên VẬT và nối với tay
         joint = candidate.AddComponent<FixedJoint>();
         joint.connectedBody = handRigidbody;
