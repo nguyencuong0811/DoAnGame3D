@@ -102,11 +102,11 @@ public class RagdollController : MonoBehaviour
     void Update()
     {
         HandleInput();
-        CheckGround();
     }
 
     void FixedUpdate()
     {
+        CheckGround();
         HandleMovement();
         HandleRotation();
         HandleJump();
@@ -117,9 +117,11 @@ public class RagdollController : MonoBehaviour
     {
         moveX = Input.GetAxisRaw("Horizontal");
         moveZ = Input.GetAxisRaw("Vertical");
-        
+
         isRunning = Input.GetKey(KeyCode.LeftShift);
-        jumpPressed = Input.GetButtonDown("Jump");
+
+        if (Input.GetButtonDown("Jump"))
+            jumpPressed = true;
     }
 
     void CheckGround()
@@ -194,14 +196,17 @@ public class RagdollController : MonoBehaviour
     void HandleJump()
     {
         if (sphereRigidbody == null) return;
-        
+
         bool canJump = Time.time - lastJumpTime > jumpCooldown;
-        
+
         if (jumpPressed && isGrounded && canJump)
         {
+            AudioManager.Instance.PlaySFXJump();
             sphereRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             lastJumpTime = Time.time;
         }
+
+        jumpPressed = false;
     }
 
     // HÀM MỚI: CẬP NHẬT ANIMATION (giống NetworkPlayer)
