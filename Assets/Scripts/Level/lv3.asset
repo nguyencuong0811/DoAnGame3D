@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 744e26b863196014886590f17aac18e8, type: 3}
-  m_Name: lv2
+  m_Name: lv3
   m_EditorClassIdentifier: 
-  timeLimitSeconds: 200
+  timeLimitSeconds: 120
   nextSceneName: 
   requirements:
-  - itemId: BinhHoa
+  - itemId: Hop
+    count: 3
+  - itemId: Ball
+    count: 2
+  - itemId: BinhNuoc
+    count: 2
+  - itemId: Vali
     count: 1
-  - itemId: BanTron
+  - itemId: ChauCay
     count: 1
   - itemId: GheSofaNho
     count: 1
-  - itemId: LoNuong
-    count: 1
-  - itemId: LoViSong
-    count: 1
-  - itemId: Vali
-    count: 2
