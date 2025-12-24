@@ -27,3 +27,5 @@ MonoBehaviour:
     count: 1
   - itemId: Vali
     count: 2
+  - itemId: ghego
+    count: 3

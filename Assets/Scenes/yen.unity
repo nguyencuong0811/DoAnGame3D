@@ -6090,6 +6090,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1000621026015871646}
+  - component: {fileID: 1000621026015871648}
+  - component: {fileID: 1000621026015871647}
   m_Layer: 0
   m_Name: ghetra
   m_TagString: Untagged
@@ -8193,7 +8195,6 @@ Transform:
   - {fileID: 6972058449983734039}
   - {fileID: 5914284677792076932}
   - {fileID: 7770911649951341387}
-  - {fileID: 2937142375008047982}
   - {fileID: 2176224443194657558}
   - {fileID: 5492876194119971353}
   - {fileID: 5284589179238059876}
@@ -9509,7 +9510,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!23 &853742611659165063
@@ -10058,6 +10059,47 @@ Transform:
   - {fileID: 5314507234055144050}
   m_Father: {fileID: 543450652194843160}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1000621026015871647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9427008306287718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c3643b1916a0a45893728067f20389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: ghego
+  beingCarried: 0
+--- !u!54 &1000621026015871648
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9427008306287718}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!4 &1007105697443192560
 Transform:
   m_ObjectHideFlags: 0
@@ -16282,7 +16324,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3816035422516406121, guid: b1171b11d83a76741bb23aa33ad7034e, type: 3}
 --- !u!4 &2859252688590427634
@@ -16567,13 +16609,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3970417091493928868}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4298799, y: 0.045880675, z: -0.8976316}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -5.039359e-17, y: -0.9865357, z: 5.039359e-17, w: -0.16354595}
+  m_LocalPosition: {x: 0.009661229, y: 0.0028335056, z: -0.0002418984}
+  m_LocalScale: {x: 0.86273825, y: 0.8627384, z: 0.86273825}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6384297530186546671}
-  m_Father: {fileID: 543450652194843160}
+  m_Father: {fileID: 7770911649951341387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2937392861890396283
 Transform:
@@ -17415,6 +17457,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7747717083403210518}
+  - component: {fileID: 7747717083403210520}
+  - component: {fileID: 7747717083403210519}
   m_Layer: 0
   m_Name: pasted__ghetra
   m_TagString: Untagged
@@ -20145,6 +20189,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7770911649951341387}
+  - component: {fileID: 7770911649951341389}
+  - component: {fileID: 7770911649951341388}
   m_Layer: 0
   m_Name: group52
   m_TagString: Untagged
@@ -28111,7 +28157,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1972235266020364245, guid: b1171b11d83a76741bb23aa33ad7034e, type: 3}
 --- !u!4 &5871796765421567617
@@ -34524,7 +34570,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4477082397816660073, guid: b1171b11d83a76741bb23aa33ad7034e, type: 3}
 --- !u!1 &7449822432448305279
@@ -36223,6 +36269,47 @@ Transform:
   - {fileID: 8232546767213053128}
   m_Father: {fileID: 2176224443194657558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7747717083403210519
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3126688125619120555}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &7747717083403210520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3126688125619120555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c3643b1916a0a45893728067f20389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: ghego
+  beingCarried: 0
 --- !u!4 &7748730715224690962
 Transform:
   m_ObjectHideFlags: 0
@@ -36356,8 +36443,50 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6399163202021659294}
+  - {fileID: 2937142375008047982}
   m_Father: {fileID: 543450652194843160}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7770911649951341388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916266602801673652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c3643b1916a0a45893728067f20389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: ghego
+  beingCarried: 0
+--- !u!54 &7770911649951341389
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916266602801673652}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7771398614537901541
 GameObject:
   m_ObjectHideFlags: 0
@@ -36828,7 +36957,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!23 &7868194593373761280
@@ -37593,7 +37722,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4712477794023769951, guid: b1171b11d83a76741bb23aa33ad7034e, type: 3}
 --- !u!4 &8034660552550318709
@@ -38927,7 +39056,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4183741248001406947, guid: b1171b11d83a76741bb23aa33ad7034e, type: 3}
 --- !u!4 &8232665984992593222
@@ -39059,7 +39188,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6532850587995180759, guid: b1171b11d83a76741bb23aa33ad7034e, type: 3}
 --- !u!4 &8255649888962759617

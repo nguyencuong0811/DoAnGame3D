@@ -16,14 +16,20 @@ MonoBehaviour:
   nextSceneName: 
   requirements:
   - itemId: Hop
-    count: 3
+    count: 1
   - itemId: Ball
     count: 2
-  - itemId: BinhNuoc
-    count: 2
-  - itemId: Vali
-    count: 1
   - itemId: ChauCay
     count: 1
-  - itemId: GheSofaNho
+  - itemId: TV
+    count: 1
+  - itemId: GheDau
+    count: 4
+  - itemId: LoViSong
+    count: 1
+  - itemId: BanTron
+    count: 1
+  - itemId: GheVanPhong
+    count: 1
+  - itemId: Piano
     count: 1
