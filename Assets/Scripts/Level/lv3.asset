@@ -15,12 +15,8 @@ MonoBehaviour:
   timeLimitSeconds: 120
   nextSceneName: 
   requirements:
-  - itemId: Hop
-    count: 1
   - itemId: Ball
     count: 2
-  - itemId: ChauCay
-    count: 1
   - itemId: TV
     count: 1
   - itemId: GheDau
